@@ -1,12 +1,12 @@
 %define _incdir /usr/include/ploop
 Summary: ploop tools
 Name: ploop
-Version: 1.14.1
+Version: 1.14.2
 %define rel 1
 Release: %{rel}%{?dist}
 Group: Applications/System
 License: GNU GPL
-Source: %{name}-%{version}.tar.bz2
+Source: %{name}-%{version}-%{rel}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: ploop-lib = %{version}-%{release}
 BuildRequires: libxml2-devel
@@ -16,7 +16,7 @@ BuildRequires: e2fsprogs-devel
 This package contains tools to work with ploop devices and images.
 
 %prep
-%setup -q
+%setup -n %{name}-%{version}-%{rel}
 
 %build
 make %{?_smp_mflags} LIBDIR=%{_libdir} all
@@ -94,6 +94,10 @@ Headers and a static version of ploop library
 %attr(644,root,root) %{_incdir}/dynload.h
 
 %changelog
+* Tue Apr 19 2016 Sergey Mamonov <mamonov@fastvps.ru> 1.14.2-1
+- Get git version from Feb 08 2016 with fixes and e4defrag support
+- Backport fix from https://src.openvz.org/projects/OVZ/repos/ploop/commits/25bb9dc27103ffcf9713a896a7e834a9313dc5e0
+
 * Mon Sep 21 2015 Kir Kolyshkin <kir@openvz.org> 1.14.1-1
 - Fixes:
 -- if mke2fs fails, retry it without -Elazy_journal_init (#OVZ-6539)

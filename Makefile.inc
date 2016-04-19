@@ -1,6 +1,6 @@
 NAME=ploop
-VERSION=1.14.1
-RELEASE=
+VERSION=1.14.2
+RELEASE=-1
 
 CC=gcc
 INSTALL=install
