@@ -1325,8 +1325,23 @@ static int ploop_mount_fs(struct ploop_mount_param *param, int need_balloon)
 	snprintf(buf, sizeof(buf), "%s/" BALLOON_FNAME, param->target);
 	if (stat(buf, &st) < 0) {
 		ploop_err(errno, "Can't stat balloon file %s", buf);
-		umount(param->target);
-		return SYSEXIT_MOUNT;
+		ploop_log(0, "Create ballon file %s", buf);
+		
+		// Try to create balloon file and get inode
+		int fd;
+		fd = open(buf, O_CREAT|O_RDONLY|O_TRUNC, 0600);
+		if (fd == -1) {
+			ploop_err(errno, "Can't create balloon file %s", buf);
+			umount(param->target);
+			return SYSEXIT_MOUNT;
+		}
+		close(fd);
+
+		if (stat(buf, &st) < 0) {
+			ploop_err(errno, "Can't stat balloon file %s", buf);
+			umount(param->target);
+			return SYSEXIT_MOUNT;
+		}
 	}
 
 	len = strlen(data);
